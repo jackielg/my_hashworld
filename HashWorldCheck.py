@@ -8,10 +8,9 @@ import ssl
 import time
 
 import requests
+import schedule
 
 import Send_email
-import schedule
-import threading
 
 # 日志
 # 第一步，创建一个logger
@@ -245,13 +244,17 @@ def loop_Lottery():
             all_total = all_total + total
             logging.warning("========== End[" + phone + "], Total[ " + str(all_total) + " ] ==========")
             logging.warning('\n')
-            time.sleep(5)
+            time.sleep(3)
 
     # sending email
     datetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    sub = "Onechain [" + datetime + "][" + str(all_total) + "]"
+    sub = "HashWorld [" + datetime + "][" + str(all_total) + "]"
     Send_email.send_mail('newseeing@163.com', sub, content)
 
+
+# status_code = open_FirstPage()
+# if status_code == 200:
+#     loop_Lottery()
 
 def daily_job():
     status_code = open_FirstPage()
@@ -260,8 +263,8 @@ def daily_job():
 
 
 # ssl._create_default_https_context = ssl._create_unverified_context
-schedule.every(3).minutes.do(daily_job)
-# schedule.every().hour.do(daily_job)
+# schedule.every(120).minutes.do(daily_job)
+schedule.every(6).hours.do(daily_job)
 # schedule.every().day.at("10:30").do(daily_job)
 # schedule.every().monday.do(daily_job)
 # schedule.every().wednesday.at("13:15").do(daily_job)
