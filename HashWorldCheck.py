@@ -223,6 +223,9 @@ def loop_Lottery():
             logging.warning('********** Login success! token:' + token)
 
             wonder_list = get_prize_wheel(token)
+            if wonder_list == -1:
+                continue
+
             reveal = 0
             for i in range(len(wonder_list)):
                 has_reveal = wonder_list[i]['has_reveal']
@@ -236,8 +239,11 @@ def loop_Lottery():
                 has_reveal = wonder_list[j]['has_reveal']
                 if not bool(has_reveal):
                     # logging.warning('********** lottery_click')
-                    click_Lottery(token, j)
-                    reveal = reveal + 1
+                    lottery = click_Lottery(token, j)
+                    if lottery == -1:
+                        continue
+                    else:
+                        reveal = reveal + 1
 
             total = check_UserTotal(token)
             content = content + "=== [" + phone + "], Total[ " + str(total) + " ] ===\t\n"
@@ -264,8 +270,8 @@ def daily_job():
 
 # ssl._create_default_https_context = ssl._create_unverified_context
 # schedule.every(120).minutes.do(daily_job)
-schedule.every(6).hours.do(daily_job)
-# schedule.every().day.at("10:30").do(daily_job)
+# schedule.every(6).hours.do(daily_job)
+schedule.every().day.at("08:33").do(daily_job)
 # schedule.every().monday.do(daily_job)
 # schedule.every().wednesday.at("13:15").do(daily_job)
 
