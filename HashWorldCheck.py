@@ -256,7 +256,7 @@ def loop_Lottery():
     datetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
     sub = "HashWorld [" + datetime + "][" + str(all_total) + "]"
     Send_email.send_mail('newseeing@163.com', sub, content)
-
+    logging.warning('********** Sending Email Complete!')
 
 # status_code = open_FirstPage()
 # if status_code == 200:
