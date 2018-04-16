@@ -250,7 +250,7 @@ def loop_Lottery():
             all_total = all_total + total
             logging.warning("========== End[" + phone + "], Total[ " + str(all_total) + " ] ==========")
             logging.warning('\n')
-            time.sleep(3)
+            time.sleep(2)
 
     # sending email
     datetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
@@ -271,10 +271,10 @@ def daily_job():
 # ssl._create_default_https_context = ssl._create_unverified_context
 # schedule.every(120).minutes.do(daily_job)
 # schedule.every(6).hours.do(daily_job)
-schedule.every().day.at("08:33").do(daily_job)
+schedule.every().day.at("01:00").do(daily_job)
 # schedule.every().monday.do(daily_job)
 # schedule.every().wednesday.at("13:15").do(daily_job)
 
 while True:
     schedule.run_pending()
-    time.sleep(1)
+    time.sleep(60)
