@@ -67,8 +67,9 @@ def open_FirstPage():
 
     try:
         response = requests.request("GET", url, headers=headers)
-
         res = response.status_code
+        logging.warning('********** open_FirstPage(), status_code='+str(res))
+
         if res == 200:
             return res
         else:
@@ -264,17 +265,19 @@ def loop_Lottery():
 
 def daily_job():
     status_code = open_FirstPage()
-    if status_code == 200:
-        loop_Lottery()
+    while status_code != 200:
+        time.sleep(300)
+        status_code = open_FirstPage()
+    loop_Lottery()
 
 
 # ssl._create_default_https_context = ssl._create_unverified_context
 # schedule.every(120).minutes.do(daily_job)
 # schedule.every(6).hours.do(daily_job)
-schedule.every().day.at("01:00").do(daily_job)
+schedule.every().day.at("01:05").do(daily_job)
 # schedule.every().monday.do(daily_job)
 # schedule.every().wednesday.at("13:15").do(daily_job)
 
 while True:
     schedule.run_pending()
-    time.sleep(60)
+    time.sleep(1)
