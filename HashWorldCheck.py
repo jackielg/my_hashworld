@@ -68,7 +68,7 @@ def open_FirstPage():
     try:
         response = requests.request("GET", url, headers=headers)
         res = response.status_code
-        logging.warning('********** open_FirstPage(), status_code='+str(res))
+        logging.warning('********** open_FirstPage(), status_code=' + str(res))
 
         if res == 200:
             return res
@@ -219,7 +219,7 @@ def loop_Lottery():
         token = login_GetAccessToken(data)
         if token == -1:
             logging.warning('********** Login fail!')
-            exit(-1)
+            continue
         else:
             logging.warning('********** Login success! token:' + token)
 
@@ -259,6 +259,7 @@ def loop_Lottery():
     Send_email.send_mail('newseeing@163.com', sub, content)
     logging.warning('********** Sending Email Complete!')
 
+
 # status_code = open_FirstPage()
 # if status_code == 200:
 #     loop_Lottery()
@@ -273,8 +274,8 @@ def daily_job():
 
 # ssl._create_default_https_context = ssl._create_unverified_context
 # schedule.every(120).minutes.do(daily_job)
-# schedule.every(6).hours.do(daily_job)
-schedule.every().day.at("01:05").do(daily_job)
+schedule.every(8).hours.do(daily_job)
+# schedule.every().day.at("18:30").do(daily_job)
 # schedule.every().monday.do(daily_job)
 # schedule.every().wednesday.at("13:15").do(daily_job)
 
