@@ -274,7 +274,7 @@ def daily_job():
 
 # ssl._create_default_https_context = ssl._create_unverified_context
 # schedule.every(120).minutes.do(daily_job)
-schedule.every(8).hours.do(daily_job)
+schedule.every(4).hours.do(daily_job)
 # schedule.every().day.at("18:30").do(daily_job)
 # schedule.every().monday.do(daily_job)
 # schedule.every().wednesday.at("13:15").do(daily_job)
