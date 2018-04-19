@@ -203,7 +203,7 @@ def check_UserTotal(token):
 
 def loop_Lottery():
     all_total = 0
-    content = "\t\n"
+    content_list = []
 
     file = open('hash_world_data.json', 'r', encoding='utf-8')
     data_dict = json.load(file)
@@ -247,16 +247,21 @@ def loop_Lottery():
                         reveal = reveal + 1
 
             total = check_UserTotal(token)
-            content = content + "=== [" + phone + "], Total[ " + str(total) + " ] ===\t\n"
             all_total = all_total + total
             logging.warning("========== End[" + phone + "], Total[ " + str(all_total) + " ] ==========")
             logging.warning('\n')
+
+            # 构建Json数组，用于发送HTML邮件
+            # Python 字典类型转换为 JSON 对象
+            content_data = {
+                "phone": phone,
+                "value": total
+            }
+            content_list.append(content_data)
             time.sleep(2)
 
     # sending email
-    datetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
-    sub = "HashWorld [" + datetime + "][" + str(all_total) + "]"
-    Send_email.send_mail('newseeing@163.com', sub, content)
+    Send_email.send_HtmlEmail('newseeing@163.com', content_list)
     logging.warning('********** Sending Email Complete!')
 
 
