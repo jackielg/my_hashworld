@@ -69,6 +69,7 @@ def send_HtmlEmail(to_list, content_list):
            '<p>Hello!</p>' + \
            '<table border="1px" cellspacing="0px" style="border-collapse:collapse" id="table-7">' + \
            '<thead>' + \
+           '<th align="center">No.</th>' + \
            '<th align="center">phone</th>' + \
            '<th align="center">value</th>' + \
            '</thead>' + \
@@ -81,14 +82,18 @@ def send_HtmlEmail(to_list, content_list):
 
     body = ''
     value_total = 0
-
+    i = 0
     for item in content_list:
+        i = i + 1
         phone = item.get('phone', 'NA')
         value = item.get('value', 'NA')
         value_total = value_total + value
 
-        body = body + '<tr><td align="center">' + phone + '</td><td align="right">' + str(round(value, 2)) + '</td></tr>'
-    sum = body + '<tr><td align="center">Sum:</td><td align="right">' + str(round(value_total, 2)) + '</td></tr>'
+        body = body + '<tr><td align="center">' + str(i) + \
+               '</td><td align="center">' + phone + \
+               '</td><td align="right">' + str(round(value, 2)) + '</td></tr>'
+    sum = body + '<tr><td colspan="2" align="center">Sum:</td><td align="right">' + \
+          str(round(value_total, 2)) + '</td></tr>'
     mail_msg = head + sum + end
 
     datetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())

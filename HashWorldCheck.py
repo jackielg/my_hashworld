@@ -246,8 +246,8 @@ def loop_Lottery():
                     else:
                         reveal = reveal + 1
 
-            total = check_UserTotal(token)
-            all_total = all_total + total
+            value = check_UserTotal(token)
+            all_total = all_total + value
             logging.warning("========== End[" + phone + "], Total[ " + str(all_total) + " ] ==========")
             logging.warning('\n')
 
@@ -255,7 +255,7 @@ def loop_Lottery():
             # Python 字典类型转换为 JSON 对象
             content_data = {
                 "phone": phone,
-                "value": total
+                "value": value
             }
             content_list.append(content_data)
             time.sleep(2)
@@ -264,17 +264,15 @@ def loop_Lottery():
     Send_email.send_HtmlEmail('newseeing@163.com', content_list)
     logging.warning('********** Sending Email Complete!')
 
-
-# status_code = open_FirstPage()
-# if status_code == 200:
-#     loop_Lottery()
-
 def daily_job():
     status_code = open_FirstPage()
     while status_code != 200:
         time.sleep(300)
         status_code = open_FirstPage()
     loop_Lottery()
+
+# Start from here...
+daily_job()
 
 
 # ssl._create_default_https_context = ssl._create_unverified_context
