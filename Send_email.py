@@ -39,7 +39,7 @@ def send_HtmlEmail(to_list, content_list):
            '<html id="pageLoading">' + \
            '<head>' + \
            '<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>' + \
-           '<title>OneChain</title>' + \
+           '<title>HashWorld</title>' + \
            '<style type="text/css">' + \
            '/* Table Head */' + \
            '#table-7 thead th {' + \
