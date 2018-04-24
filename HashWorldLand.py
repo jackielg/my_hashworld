@@ -66,7 +66,7 @@ def open_FirstPage():
     }
 
     try:
-        response = requests.request("GET", url, headers=headers, verify=False)
+        response = requests.request("GET", url, headers=headers)
         res = response.status_code
         logging.warning('********** open_FirstPage(), status_code=' + str(res))
 
@@ -107,8 +107,8 @@ def login_GetAccessToken(payload):
         return -1
 
 
-def get_prize_wheel(token):
-    url = "https://game.hashworld.top/apis/game/prize_wheel/"
+def get_Landlist(token):
+    url = "https://game.hashworld.top/apis/land/lbsland/"
 
     headers = {
         'content-type': "application/x-www-form-urlencoded",
@@ -124,6 +124,7 @@ def get_prize_wheel(token):
         requests.packages.urllib3.disable_warnings()
         ssl._create_default_https_context = ssl._create_unverified_context
         response = requests.request("GET", url, headers=headers)
+
 
         res = response.json()["status"]
         if res == 'common_OK':
@@ -200,92 +201,10 @@ def check_UserTotal(token):
         print(e)
         return -1
 
-def get_Landlist(token):
-    url = "https://game.hashworld.top/apis/land/lbsland/"
-
-    headers = {
-        'content-type': "application/x-www-form-urlencoded",
-        'accept': "application/json, text/plain, */*",
-        'user-agent': "Mozilla/5.0 (Linux; Android 4.4.2; ZTE Q2S-T Build/KVT49L) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.83 Mobile Safari/537.36",
-        'accept-language': "zh-CN,zh;q=0.8",
-        'accept-encoding': "gzip, deflate, br",
-        'authorization': "Token " + token,
-        'cache-control': "no-cache"
-    }
-
-    try:
-        requests.packages.urllib3.disable_warnings()
-        ssl._create_default_https_context = ssl._create_unverified_context
-        response = requests.request("GET", url, headers=headers)
-
-
-        res = response.json()["status"]
-        if res == 'common_OK':
-            land_list = response.json()['data']
-            return land_list
-    except Exception as e:
-        print(e)
-        return -1
-
-def get_LandPrice(token, land_number):
-    url = "https://game.hashworld.top/apis/land/hall/"
-
-    headers = {
-        'user-agent': "application/x-www-form-urlencoded",
-        'accept-language': "zh-CN,zh;q=0.8",
-        'accept-encoding': "gzip, deflate, br",
-        'authorization': "Token " + token,
-        'content-type': "application/json",
-        'cache-control': "no-cache"
-    }
-
-    try:
-        payload = "{\n\t\"land\": {\n\t\t\"id\": ["+str(land_number)+"]\n\t}\n}"
-
-        requests.packages.urllib3.disable_warnings()
-        ssl._create_default_https_context = ssl._create_unverified_context
-        response = requests.request("POST", url, data=payload, headers=headers)
-
-        res = response.json()["status"]
-        if res == 'common_OK':
-            land_name = response.json()["data"][0]["land_name"]
-            price = response.json()["data"][0]["price"]
-            # logging.warning('>>>>>>>>>> lottery...... ' + str(price))
-            return land_name, price
-        else:
-            return -1, -1
-    except Exception as e:
-        print(e)
-        return -1, -1
-
-def find_and_email_land_price(token):
-    content_land_list = []
-    # find land list and price
-    land_list = get_Landlist(token)
-    for i in range(len(land_list)):
-        land_Num = land_list[i][0]
-        (land_name, price) = get_LandPrice(token, land_Num)
-        logging.warning('********** Land_Num:' + str(land_Num) + ", Land_Name:" + land_name + ", Price = " + str(price))
-
-        # 构建Json数组，用于发送HTML邮件
-        # Python 字典类型转换为 JSON 对象
-        land_data = {
-            "land_num": land_Num,
-            "land_name": land_name,
-            "price": price
-        }
-        content_land_list.append(land_data)
-    # sending email
-    content_land_list = sorted(content_land_list, key=lambda x: x["price"])
-    Send_email.send_LandEmail('newseeing@163.com', content_land_list)
-    logging.warning('********** Sending Land Email Complete!')
-
-
 
 def loop_Lottery():
     all_total = 0
     content_list = []
-    token = ''
 
     file = open('hash_world_data.json', 'r', encoding='utf-8')
     data_dict = json.load(file)
@@ -341,22 +260,97 @@ def loop_Lottery():
             }
             content_list.append(content_data)
             time.sleep(2)
-            # break
 
     # sending email
     Send_email.send_HtmlEmail('newseeing@163.com', content_list)
     logging.warning('********** Sending Email Complete!')
-    logging.warning('\n')
-    find_and_email_land_price(token)
 
 
+def get_LandPrice(token, land_number):
+    url = "https://game.hashworld.top/apis/land/hall/"
+
+    headers = {
+        'user-agent': "application/x-www-form-urlencoded",
+        'accept-language': "zh-CN,zh;q=0.8",
+        'accept-encoding': "gzip, deflate, br",
+        'authorization': "Token " + token,
+        'content-type': "application/json",
+        'cache-control': "no-cache"
+    }
+
+    try:
+        payload = "{\n\t\"land\": {\n\t\t\"id\": ["+str(land_number)+"]\n\t}\n}"
+
+        requests.packages.urllib3.disable_warnings()
+        ssl._create_default_https_context = ssl._create_unverified_context
+        response = requests.request("POST", url, data=payload, headers=headers)
+
+        res = response.json()["status"]
+        if res == 'common_OK':
+            land_name = response.json()["data"][0]["land_name"]
+            price = response.json()["data"][0]["price"]
+            # logging.warning('>>>>>>>>>> lottery...... ' + str(price))
+            return land_name, price
+        else:
+            return -1, -1
+    except Exception as e:
+        print(e)
+        return -1, -1
+
+def loop_Land():
+    all_total = 0
+    content_list = []
+
+    file = open('hash_world_data.json', 'r', encoding='utf-8')
+    data_dict = json.load(file)
+    # print(data_dict)
+    # print(type(data_dict))
+
+    for item in data_dict['data']:
+        phone = item.get('phone', 'NA')
+        password = item.get('password', 'NA')
+        data = dict(phone=phone, password=password)
+        logging.warning("========== Checking [" + phone + "] ==========")
+
+        token = login_GetAccessToken(data)
+        if token == -1:
+            logging.warning('********** Login fail!')
+            continue
+        else:
+            logging.warning('********** Login success! token:' + token)
+
+            wonder_list = get_Landlist(token)
+            if wonder_list == -1:
+                continue
+
+            for i in range(len(wonder_list)):
+                land_Num = wonder_list[i][0]
+                (land_name, price) = get_LandPrice(token, land_Num)
+                logging.warning('********** Land Num:' + str(land_Num) + ", Land_Name:"+land_name+", Price = " + str(price))
+
+            logging.warning("========== End[" + phone + "], Total[ " + str(all_total) + " ] ==========")
+            logging.warning('\n')
+
+            # 构建Json数组，用于发送HTML邮件
+            # Python 字典类型转换为 JSON 对象
+            content_data = {
+                "phone": phone,
+                "value": 0
+            }
+            content_list.append(content_data)
+            time.sleep(2)
+            break
+
+    # sending email
+    Send_email.send_HtmlEmail('newseeing@163.com', content_list)
+    logging.warning('********** Sending Email Complete!')
 
 def daily_job():
     status_code = open_FirstPage()
     while status_code != 200:
         time.sleep(300)
         status_code = open_FirstPage()
-    loop_Lottery()
+    loop_Land()
 
 # Start from here...
 daily_job()
