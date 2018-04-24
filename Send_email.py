@@ -189,7 +189,7 @@ def send_LandEmail(to_list, content_list):
 
 
     # subject = "HashWorld, [Value:" + str(round(value_total, 2)) + "]"
-    subject = "HashWorld, [Land:]"
+    subject = "HashWorld, [Land Price]"
 
     msg = MIMEText(mail_msg, 'html', 'utf-8')
     me = "newseeing@163.com"

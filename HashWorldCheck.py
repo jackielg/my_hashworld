@@ -250,13 +250,12 @@ def get_LandPrice(token, land_number):
         if res == 'common_OK':
             land_name = response.json()["data"][0]["land_name"]
             price = response.json()["data"][0]["price"]
-            # logging.warning('>>>>>>>>>> lottery...... ' + str(price))
             return land_name, price
         else:
-            return -1, -1
+            return "error", 0
     except Exception as e:
         print(e)
-        return -1, -1
+        return "error", 0
 
 def find_and_email_land_price(token):
     content_land_list = []
