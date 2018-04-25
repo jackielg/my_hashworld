@@ -190,8 +190,8 @@ def loop_Land():
                 "gen_time": gen_time
             }
             content_land_list.append(land_data)
-            if i == 2:
-                break
+            # if i == 2:
+            #     break
 
         # sending email
         # content_land_list = sorted(content_land_list, key=lambda x: x["price"])
