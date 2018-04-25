@@ -32,7 +32,6 @@ def send_mail(to_list, sub, content):
 
 
 def send_HtmlEmail(to_list, content_list):
-
     datetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
     head = '<!DOCTYPE HTML>' + \
@@ -68,7 +67,7 @@ def send_HtmlEmail(to_list, content_list):
            '</style>' + \
            '</head>' + \
            '<body>' + \
-           '<p> ********** '+ datetime +' ********** </p>' + \
+           '<p> ********** ' + datetime + ' ********** </p>' + \
            '<table border="1px" cellspacing="0px" style="border-collapse:collapse" id="table-7">' + \
            '<thead>' + \
            '<th align="center">No.</th>' + \
@@ -98,7 +97,6 @@ def send_HtmlEmail(to_list, content_list):
           str(round(value_total, 2)) + '</td></tr>'
     mail_msg = head + sum + end
 
-
     subject = "HashWorld, [Value:" + str(round(value_total, 2)) + "]"
 
     msg = MIMEText(mail_msg, 'html', 'utf-8')
@@ -118,8 +116,8 @@ def send_HtmlEmail(to_list, content_list):
         print(e)
         return False
 
-def send_LandEmail(to_list, content_list):
 
+def send_LandEmail(to_list, content_list):
     datetime = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime())
 
     head = '<!DOCTYPE HTML>' + \
@@ -130,7 +128,7 @@ def send_LandEmail(to_list, content_list):
            '<style type="text/css">' + \
            '/* Table Head */' + \
            '#table-7 thead th {' + \
-           'background-color: rgb(81, 130, 187);' + \
+           'background-color: rgb(179, 103, 48);' + \
            'color: #fff;' + \
            'border-bottom-width: 1;' + \
            '}' + \
@@ -155,13 +153,15 @@ def send_LandEmail(to_list, content_list):
            '</style>' + \
            '</head>' + \
            '<body>' + \
-           '<p> ********** '+ datetime +' ********** </p>' + \
+           '<p> ********** ' + datetime + ' ********** </p>' + \
            '<table border="1px" cellspacing="0px" style="border-collapse:collapse" id="table-7">' + \
            '<thead>' + \
            '<th align="center">No.</th>' + \
            '<th align="center">Land_Num</th>' + \
            '<th align="center">Land_Name</th>' + \
            '<th align="center">Price</th>' + \
+           '<th align="center">tradable_status</th>' + \
+           '<th align="center">gen_time</th>' + \
            '</thead>' + \
            '<tbody>'
 
@@ -178,18 +178,21 @@ def send_LandEmail(to_list, content_list):
         land_num = item.get('land_num', 'NA')
         land_name = item.get('land_name', 'NA')
         price = item.get('price', 'NA')
-
+        tradable_status = item.get('tradable_status', 'NA')
+        gen_time = item.get('gen_time', 'NA')
 
         body = body + '<tr><td align="center">' + str(i) + \
                '</td><td align="center">' + str(land_num) + \
                '</td><td align="center">' + land_name + \
-               '</td><td align="right">' + str(price) + '</td></tr>'
-    sum = body + '<tr><td colspan="2" align="center">Sum:</td><td align="right"></td><td></td></tr>'
+               '</td><td align="right">' + str(price) + \
+               '</td><td align="center">' + tradable_status + \
+               '</td><td align="center">' + gen_time + \
+               '</td></tr>'
+    sum = body + '<tr><td colspan="2" align="center">Sum:</td><td align="right"></td><td></td><td></td><td></td></tr>'
     mail_msg = head + sum + end
 
-
     # subject = "HashWorld, [Value:" + str(round(value_total, 2)) + "]"
-    subject = "HashWorld, [Land Price]"
+    subject = "HashWorld, [Total Land: " + str(i) + "]"
 
     msg = MIMEText(mail_msg, 'html', 'utf-8')
     me = "newseeing@163.com"
