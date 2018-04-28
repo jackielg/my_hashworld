@@ -186,7 +186,7 @@ def send_LandEmail(to_list, content_list):
                '</td><td align="center">' + land_name + \
                '</td><td align="right">' + str(price) + \
                '</td><td align="center">' + tradable_status + \
-               '</td><td align="center">' + gen_time + \
+               '</td><td align="center">' + str(gen_time) + \
                '</td></tr>'
     sum = body + '<tr><td colspan="2" align="center">Sum:</td><td align="right"></td><td></td><td></td><td></td></tr>'
     mail_msg = head + sum + end
