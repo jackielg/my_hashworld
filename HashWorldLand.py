@@ -153,12 +153,13 @@ def get_LandPrice(token, land_number):
             price = response.json()["data"][0]["price"]
             tradable_status = response.json()["data"][0]["tradable_status"]
             gen_time = response.json()["data"][0]["gen_time"]
-            return land_name, price, tradable_status, gen_time
+            nickname = response.json()["data"][0]["user"]["nickname"]
+            return land_name, price, tradable_status, gen_time, nickname
         else:
-            return "error", 0, "untradable", 0
+            return "error", 0, "untradable", 0, ""
     except Exception as e:
         print(e)
-        return "error", 0, "untradable", 0
+        return "error", 0, "untradable", 0, ""
 
 
 def loop_Land():
@@ -176,7 +177,7 @@ def loop_Land():
         land_list = get_Landlist(token)
         for i in range(len(land_list)):
             land_Num = land_list[i][0]
-            (land_name, price, tradable_status, gen_time) = get_LandPrice(token, land_Num)
+            (land_name, price, tradable_status, gen_time, nickname) = get_LandPrice(token, land_Num)
             logging.warning(
                 '********** Land_Num:' + str(land_Num) + ", Land_Name:" + land_name + ", Price = " + str(price))
 
@@ -187,7 +188,8 @@ def loop_Land():
                 "land_name": land_name,
                 "price": price,
                 "tradable_status": tradable_status,
-                "gen_time": gen_time
+                "gen_time": gen_time,
+                "nickname": nickname
             }
             content_land_list.append(land_data)
             # if i == 2:

@@ -162,6 +162,7 @@ def send_LandEmail(to_list, content_list):
            '<th align="center">Price</th>' + \
            '<th align="center">tradable_status</th>' + \
            '<th align="center">gen_time</th>' + \
+           '<th align="center">nickname</th>' + \
            '</thead>' + \
            '<tbody>'
 
@@ -180,6 +181,7 @@ def send_LandEmail(to_list, content_list):
         price = item.get('price', 'NA')
         tradable_status = item.get('tradable_status', 'NA')
         gen_time = item.get('gen_time', 'NA')
+        nickname = item.get('nickname', 'NA')
 
         body = body + '<tr><td align="center">' + str(i) + \
                '</td><td align="center">' + str(land_num) + \
@@ -187,8 +189,9 @@ def send_LandEmail(to_list, content_list):
                '</td><td align="right">' + str(price) + \
                '</td><td align="center">' + tradable_status + \
                '</td><td align="center">' + str(gen_time) + \
+               '</td><td align="center">' + nickname + \
                '</td></tr>'
-    sum = body + '<tr><td colspan="2" align="center">Sum:</td><td align="right"></td><td></td><td></td><td></td></tr>'
+    sum = body + '<tr><td colspan="2" align="center">Sum:</td><td align="right"></td><td></td><td></td><td></td><td></td></tr>'
     mail_msg = head + sum + end
 
     # subject = "HashWorld, [Value:" + str(round(value_total, 2)) + "]"
